@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inter Decision Tool · 2027/28 squad planning</title>
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/img/crest-colour.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="stripes"></div>
+    <div class="shade"></div>
+    <img class="mark" src="assets/img/crest-accent.svg" alt="">
+    <div class="wrap">
+      <div class="kicker">Inter Milan · 2027/28 squad planning</div>
+      <h1 class="display">From playing model to squad</h1>
+      <p class="lede">Measure how Inter play, audit the squad and the coach against that model, then find and price the
+        players that fit within budget.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="model-of-play.html">Open the Model of Play</a>
+        <a class="btn btn-ghost" href="#pipeline">How it fits together</a>
+      </div>
+      <div class="hero-meta" id="hero-meta"></div>
+    </div>
+  </section>
+
+  <!-- Pipeline -->
+  <section class="section dark" id="pipeline">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How it fits together</h2>
+      </div>
+      <div class="pipeline" id="pipeline-steps"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="assets/js/site.js"></script>
+<script>
+initShell('home');
+
+/* Hero numbers */
+document.getElementById('hero-meta').innerHTML = [
+  ['12', 'Inter league matches'],
+  ['2 / 7', 'Phases analysed'],
+  ['1 / 5', 'Modules live'],
+  ['20', 'Teams as context'],
+].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
+
+/* Pipeline (from the decision-tool architecture board) */
+const STEPS = [
+  { n: 1, title: 'Data', text: 'Opta event data for Serie A, plus summary stats, fees and age curves for every league over five seasons.' },
+  { n: 2, title: 'Playing model', text: 'KPIs for the five phases of play define how Inter play and what each position must do.' },
+  { n: 3, title: 'Requirements & audit', text: 'Role templates with weighted KPIs. Audit the squad and the coach against them.' },
+  { n: 4, title: 'Value & search', text: 'Find candidates who fit each role, then value them on fees, resale, NPV and risk.' },
+  { n: 5, title: 'Decision & output', text: 'Optimise fit per euro under the wage cap with a balance of at least zero, then build the evidence report.', mods: [['Squad builder', 'static']] },
+];
+document.getElementById('pipeline-steps').innerHTML = STEPS.map(s => {
+  const mods = TABS.filter(t => t.step === s.n);
+  const live = mods.some(t => t.status === 'live');
+  const links = mods.map(t => `<a class="mod" href="${t.href}">${t.label}<span class="badge ${t.status}">${STATUS_LABEL[t.status]}</span></a>`)
+    .concat((s.mods || []).map(([m]) => `<span class="mod static">${m}<span class="badge planned">Planned</span></span>`)).join('');
+  return `<div class="step ${live ? 'active' : ''}"><div class="n">0${s.n}</div><h3>${s.title}</h3><p>${s.text}</p>
+          <div class="mods">${links}</div></div>`;
+}).join('');
+
+/* Card thumbnails: stylised pitches, attack left -> right */
+function pitch(kind) {
+  const L = 'stroke="rgba(255,255,255,.35)" stroke-width=".5" fill="none"';
+  const lines = `<rect x="5" y="5" width="150" height="90" ${L}/><line x1="80" y1="5" x2="80" y2="95" ${L}/>
+    <circle cx="80" cy="50" r="11" ${L}/><rect x="5" y="27" width="22" height="46" ${L}/><rect x="133" y="27" width="22" height="46" ${L}/>
+    <rect x="5" y="39" width="8" height="22" ${L}/><rect x="147" y="39" width="8" height="22" ${L}/>`;
+  const thirds = `<line x1="55" y1="5" x2="55" y2="95" stroke="rgba(255,255,255,.18)" stroke-dasharray="1.5 1.5" stroke-width=".4"/>
+    <line x1="105" y1="5" x2="105" y2="95" stroke="rgba(255,255,255,.18)" stroke-dasharray="1.5 1.5" stroke-width=".4"/>`;
+  const arrow = (x1, y1, x2, y2, o = 1) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-opacity="${o}" stroke-width="1" marker-end="url(#ah)"/>`;
+  const dot = (x, y, r = 2.6, f = '#fff') => `<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`;
+  let fx = '';
+  if (kind === 'buildup') {
+    fx = `<rect x="5" y="5" width="50" height="90" fill="#0a2fd6" fill-opacity=".55"/>` +
+      arrow(12, 50, 26, 30) + arrow(26, 30, 38, 18) + arrow(26, 30, 46, 46) + arrow(46, 46, 62, 50, .6) +
+      [[12, 50], [26, 30], [26, 50], [26, 70], [38, 18], [46, 46]].map(p => dot(...p)).join('');
+  } else if (kind === 'progression') {
+    fx = `<rect x="55" y="5" width="50" height="90" fill="#0a2fd6" fill-opacity=".55"/>` +
+      arrow(60, 22, 80, 14) + arrow(80, 14, 98, 32) + arrow(66, 60, 98, 32, .7) + arrow(98, 32, 116, 40, .8) +
+      [[60, 22], [80, 14], [66, 60], [98, 32]].map(p => dot(...p)).join('');
+  } else if (kind === 'xi') {
+    fx = [[12, 50], [28, 30], [26, 50], [28, 70], [52, 12], [52, 88], [46, 34], [40, 50], [46, 66], [72, 42], [72, 58]]
+      .map(p => dot(p[0], p[1], 3.4, '#fff')).join('');
+  } else if (kind === 'finishing') {
+    fx = `<rect x="105" y="5" width="50" height="90" fill="#fff" fill-opacity=".06" stroke="#f7ce46" stroke-dasharray="2 2" stroke-width=".6"/>`;
+  } else if (kind === 'transition') {
+    fx = arrow(70, 60, 96, 46, .55) + arrow(96, 46, 126, 50, .55) + dot(70, 60, 2.6, '#f7ce46');
+  }
+  return `<svg viewBox="0 0 160 100" preserveAspectRatio="${kind === 'buildup' ? 'xMinYMid' : 'xMidYMid'} slice" aria-hidden="true">
+    <defs><marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L6 3L0 6z" fill="#fff"/></marker></defs>
+    ${lines}${thirds}${fx}</svg>`;
+}
+document.querySelectorAll('[data-pitch]').forEach(el => el.insertAdjacentHTML('afterbegin', pitch(el.dataset.pitch)));
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Model of Play · Inter Decision Tool</title>
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/img/crest-colour.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="banner">
+  <div class="stripes"></div><div class="shade"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a> / Model of Play</div>
+    <h1 class="display">Model of Play</h1>
+    <div class="sub" id="mop-sub"></div>
+    <div class="tools">
+      <a class="btn btn-ghost" id="open-raw" href="reports/model-of-play.html" target="_blank" rel="noopener">Open report in a new tab ↗</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap mop" id="mop">
+  <aside class="toc" id="toc">
+    <button class="toc-toggle" type="button" aria-expanded="false"><span>Contents</span><span id="toc-current"></span></button>
+    <h2>Contents</h2>
+    <ul id="toc-list"><li style="color:var(--muted)">Loading…</li></ul>
+  </aside>
+  <div>
+    <div class="frame-note">Section links and the synced contents only work when the site is served over http (GitHub Pages,
+      or <code>python3 -m http.server</code> locally). Opened as a local file, the report shows its own contents instead.</div>
+    <iframe class="report-frame" id="report" src="reports/model-of-play.html" title="Inter Milan game model report"></iframe>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/mop.js"></script>
+</body>
+</html>
