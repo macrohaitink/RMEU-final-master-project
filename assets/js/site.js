@@ -70,7 +70,7 @@ function renderFooter() {
         <div><b>${SITE.title}</b><span>Squad planning for 2027/28</span></div>
       </div>
       <div><h4>Modules</h4><ul>${links}</ul></div>
-      <div><h4>Data</h4><ul><li>${SITE.source}</li><li>${SITE.season}, through ${SITE.dataThrough}</li><li>League used as context (other 19 teams)</li></ul></div>
+      <div><h4>Data</h4><ul><li>${SITE.source}</li><li>${SITE.season}, through ${SITE.dataThrough}</li><li>League used as context (other 19 teams)</li><li>No raw data files are published. The site shows derived metrics, with selected match events plotted for illustration.</li></ul></div>
     </div>
     <div class="wrap footer-legal">Prototype · Updated ${SITE.updated}</div>`;
 }
